@@ -8,28 +8,30 @@ require_once 'DBConnect.php';
 require_once 'Contact.php';
 require_once 'ContactManager.php';
 
-// 2. Test de l'instance unique DBConnect
-$dbInstance = DBConnect::getInstance();
-echo "Test de l'instance DBConnect :\n";
-var_dump($dbInstance);
+echo "=== Bienvenue dans votre carnet d'adresses ===\n";
+echo "Tapez 'list' pour afficher les contacts ou 'exit' pour quitter.\n\n";
 
-// 3. Test de la récupération de l'objet PDO
-$pdo = $dbInstance->getPDO();
-echo "\nTest de l'objet PDO :\n";
-var_dump($pdo);
-
-// 4. Test du ContactManager et de la méthode findAll(
-$contactManager = new ContactManager();
-$contacts = $contactManager->findAll();
-echo "--- Résultats de findAll() ---\n";
-var_dump($contacts);
-
-// 5. Boucle interactive du terminal (CLI)
+// 2. Boucle interactive du terminal (CLI)
 while (true) {
     $line = readline("Entrez votre commande : ");
 
     if ($line === 'list') {
-        echo "Affichage de la liste\n";
+        // Instanciation du manager pour récupérer les contacts de la base de données
+        $contactManager = new ContactManager();
+        $contacts = $contactManager->findAll();
+
+        if (empty($contacts)) {
+            echo "Aucun contact trouvé dans le carnet d'adresses.\n";
+        } else {
+            echo "--- Liste des contacts ---\n";
+            // Affichage de chaque contact grâce à la méthode __toString()
+            foreach ($contacts as $contact) {
+                echo $contact . "\n";
+            }
+        }
+    } elseif ($line === 'exit') {
+        echo "Au revoir !\n";
+        break;
     } else {
         echo "Commande inconnue\n";
     }

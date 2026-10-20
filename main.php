@@ -3,6 +3,7 @@
 // Point d'entrée principal de l'application en mode CLI.
 
 // 1. Inclusion des dépendances du projet
+require_once 'Command.php';
 require_once 'config.php';
 require_once 'DBConnect.php';
 require_once 'Contact.php';
@@ -16,19 +17,10 @@ while (true) {
     $line = readline("Entrez votre commande : ");
 
     if ($line === 'list') {
-        // Instanciation du manager pour récupérer les contacts de la base de données
-        $contactManager = new ContactManager();
-        $contacts = $contactManager->findAll();
+            $command = new Command();
 
-        if (empty($contacts)) {
-            echo "Aucun contact trouvé dans le carnet d'adresses.\n";
-        } else {
-            echo "--- Liste des contacts ---\n";
-            // Affichage de chaque contact grâce à la méthode __toString()
-            foreach ($contacts as $contact) {
-                echo $contact . "\n";
-            }
-        }
+            $command->list();
+            
     } elseif ($line === 'exit') {
         echo "Au revoir !\n";
         break;

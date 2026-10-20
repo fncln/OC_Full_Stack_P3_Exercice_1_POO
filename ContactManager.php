@@ -24,15 +24,18 @@ class ContactManager
         $results = $query->fetchAll();
 
         $contacts = [];
-        
+
         // Hydratation : transformation de chaque ligne de résultat en instance de l'entité Contact
         foreach ($results as $data) {
-            $contacts[] = new Contact(
-                $data['id'],
-                $data['name'],
-                $data['email'],
-                $data['phone_number']
-            );
+            $contact = new Contact();
+
+            $contact
+                ->setId($data['id'])
+                ->setName($data['name'])
+                ->setEmail($data['email'])
+                ->setPhone($data['phone_number']);
+
+            $contacts[] = $contact;
         }
 
         return $contacts;

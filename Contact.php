@@ -1,27 +1,26 @@
 <?php
 
-//Classe Contact
+// Classe Contact
 // Entité représentant un contact du carnet d'adresses
 class Contact
 {
-    private ?int $id;
-    private ?string $name;
-    private ?string $email;
-    private ?string $phone;
-
-    // Constructeur de l'entité Contact
-    public function __construct(?int $id = null, ?string $name = null, ?string $email = null, ?string $phone = null)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->email = $email;
-        $this->phone = $phone;
-    }
+    private ?int $id = null;
+    private ?string $name = null;
+    private ?string $email = null;
+    private ?string $phone = null;
 
     // Récupère l'identifiant du contact
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    // Définit l'identifiant du contact
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     // Récupère le nom du contact
@@ -30,11 +29,26 @@ class Contact
         return $this->name;
     }
 
+    // Définit le nom du contact
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 
     // Récupère l'adresse email du contact
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    // Définit l'adresse email du contact
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     // Récupère le numéro de téléphone du contact
@@ -43,7 +57,15 @@ class Contact
         return $this->phone;
     }
 
-    // Représentation textuelle de l'objet (pour le debug ou l'affichage rapide)
+    // Définit le numéro de téléphone du contact
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    // Représentation textuelle de l'objet
     public function __toString(): string
     {
         return "{$this->id}, {$this->name}, {$this->email}, {$this->phone}";

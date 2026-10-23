@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/DBConnect.php';
+require_once __DIR__ . '/Contact.php';
+
 // Classe ContactManager
 // Gère les requêtes et la persistance des données pour l'entité Contact
 class ContactManager
@@ -28,20 +31,16 @@ class ContactManager
             'id' => $id,
         ]);
 
-        $data = $query->fetch();
+        // Hydratation : fetchObject() transforme directement la ligne SQL en objet Contact
+        // PDO associe chaque nom de colonne (id, name, email, phone_number)
+        // à la propriété du même nom dans la classe Contact
+        // (Contact::class donne le nom de la classe, ici "Contact")
+        // Il renvoie false si aucune ligne n'a été trouvée
+        $contact = $query->fetchObject(Contact::class);
 
-        if ($data === false) {
+        if ($contact === false) {
             return null;
         }
-
-        // Hydratation : transformation du résultat SQL en objet Contact
-        $contact = new Contact();
-
-        $contact
-            ->setId($data['id'])
-            ->setName($data['name'])
-            ->setEmail($data['email'])
-            ->setPhone($data['phone_number']);
 
         return $contact;
     }
@@ -56,44 +55,30 @@ class ContactManager
         // Requête préparée pour récupérer tous les enregistrements de la table contacts
         $query = $this->db->prepare("SELECT * FROM contacts");
         $query->execute();
-        $results = $query->fetchAll();
 
-        $contacts = [];
-
-        // Hydratation : transformation de chaque ligne de résultat en instance de l'entité Contact
-        foreach ($results as $data) {
-            $contact = new Contact();
-
-            $contact
-                ->setId($data['id'])
-                ->setName($data['name'])
-                ->setEmail($data['email'])
-                ->setPhone($data['phone_number']);
-
-            $contacts[] = $contact;
-        }
-
-        return $contacts;
+        // Hydratation : fetchAll() avec PDO::FETCH_CLASS renvoie directement
+        // un tableau d'objets Contact (un par ligne SQL)
+        return $query->fetchAll(PDO::FETCH_CLASS, Contact::class);
     }
 
     /**
      * Crée un nouveau contact dans la base de données
      *
-     * @param string $name  Nom du contact
-     * @param string $email Adresse email du contact
-     * @param string $phone Numéro de téléphone du contact
+     * @param string $name        Nom du contact
+     * @param string $email       Adresse email du contact
+     * @param string $phoneNumber Numéro de téléphone du contact
      */
-    public function create(string $name, string $email, string $phone): void
+    public function create(string $name, string $email, string $phoneNumber): void
     {
         $query = $this->db->prepare(
             "INSERT INTO contacts (name, email, phone_number)
-            VALUES (:name, :email, :phone)"
+            VALUES (:name, :email, :phone_number)"
         );
 
         $query->execute([
             'name' => $name,
             'email' => $email,
-            'phone' => $phone,
+            'phone_number' => $phoneNumber,
         ]);
     }
 

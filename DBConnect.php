@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/config.php';
+
 // Classe DBConnect
 // Gère la connexion unique (Singleton) à la base de données via PDO
 

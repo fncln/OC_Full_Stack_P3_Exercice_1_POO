@@ -7,7 +7,8 @@ class Contact
     private ?int $id = null;
     private ?string $name = null;
     private ?string $email = null;
-    private ?string $phone = null;
+    // Même nom que la colonne de la base de données (nécessaire pour l'hydratation avec PDO)
+    private ?string $phone_number = null;
 
     // Récupère l'identifiant du contact
     public function getId(): ?int
@@ -52,15 +53,15 @@ class Contact
     }
 
     // Récupère le numéro de téléphone du contact
-    public function getPhone(): ?string
+    public function getPhoneNumber(): ?string
     {
-        return $this->phone;
+        return $this->phone_number;
     }
 
     // Définit le numéro de téléphone du contact
-    public function setPhone(?string $phone): self
+    public function setPhoneNumber(?string $phoneNumber): self
     {
-        $this->phone = $phone;
+        $this->phone_number = $phoneNumber;
 
         return $this;
     }
@@ -68,6 +69,6 @@ class Contact
     // Représentation textuelle de l'objet
     public function __toString(): string
     {
-        return "{$this->id}, {$this->name}, {$this->email}, {$this->phone}";
+        return "{$this->id}, {$this->name}, {$this->email}, {$this->phone_number}";
     }
 }
